@@ -1,48 +1,48 @@
-import { Song, Unit } from "@/servers/type";
+import { Character, Song, SongFromAPI, Unit } from "@/servers/type";
 import dayjs from "dayjs";
 import { listCharacters, listSongs, listSongVocals, listUnits } from "./apis";
 
-export const listSongInfo = async (): Promise<Song[]> => {
-  const [songs, characters, songVocals] = await Promise.all([
-    listSongs(),
-    listCharacters(),
-    listSongVocals(),
-  ]);
+export const completeSongInfo = (
+  songs: SongFromAPI[],
+  characters: Character[],
+  songVocals: {
+    musicId: number;
+    characters: { characterId: number }[];
+  }[]
+): Song[] => {
+  return songs
+    .filter((song) => song.isNewlyWrittenMusic)
+    .map((song) => {
+      const songVocalsData = songVocals.find(
+        (vocal) => vocal.musicId === song.id
+      );
 
-  // combine song data with character data
-  return songs.map((song) => {
-    const songVocalsData = songVocals.find(
-      (vocal) => vocal.musicId === song.id
-    );
+      const characterIds =
+        songVocalsData?.characters.map((char) => char.characterId) || [];
 
-    const characterIds =
-      songVocalsData?.characters.map((char) => char.characterId) || [];
+      const songCharacters = characters.filter((char) =>
+        characterIds.includes(char.id)
+      );
 
-    const songCharacters = characters.filter((char) =>
-      characterIds.includes(char.id)
-    );
-
-    return {
-      id: song.id,
-      title: song.title,
-      creatorArtistId: song.creatorArtistId,
-      lyricist: song.lyricist,
-      composer: song.composer,
-      arranger: song.arranger,
-      publishedAt: dayjs(song.publishedAt).format("YYYY-MM-DD"),
-      releasedAt: dayjs(song.releasedAt).format("YYYY-MM-DD"),
-      coverImageUrl: `https://storage.sekai.best/sekai-jp-assets/music/jacket/${song.assetbundleName}/${song.assetbundleName}.webp`,
-      characters: songCharacters,
-    } as Song;
-  });
+      return {
+        id: song.id,
+        title: song.title,
+        creatorArtistId: song.creatorArtistId,
+        lyricist: song.lyricist,
+        composer: song.composer,
+        arranger: song.arranger,
+        publishedAt: dayjs(song.publishedAt).format("YYYY-MM-DD"),
+        releasedAt: dayjs(song.releasedAt).format("YYYY-MM-DD"),
+        coverImageUrl: `https://storage.sekai.best/sekai-jp-assets/music/jacket/${song.assetbundleName}/${song.assetbundleName}.webp`,
+        characters: songCharacters,
+      } as Song;
+    });
 };
 
-export const listUnitsWithCharacters = async (): Promise<Unit[]> => {
-  const [units, characters] = await Promise.all([
-    listUnits(),
-    listCharacters(),
-  ]);
-
+export const completeUnits = (
+  units: Omit<Unit, "characters" | "logoImageUrl">[],
+  characters: Character[]
+): Unit[] => {
   // Combine units with characters
   return units.map((unit) => {
     const unitCharacters = characters.filter((char) => char.unit === unit.id);
@@ -52,4 +52,20 @@ export const listUnitsWithCharacters = async (): Promise<Unit[]> => {
       logoImageUrl: `https://sekai.best/images/jp/logol_outline/logo_${unit.id}.png`,
     };
   });
+};
+
+export const completeCharacterEventSongs = (
+  songs: Song[]
+): Map<Character, Song[]> => {
+  const characterEventSongs = new Map<Character, Song[]>();
+
+  songs.forEach((song) => {
+    const character = song.characters[0]; // Assuming the first character is the main one for the song
+    if (!characterEventSongs.has(character)) {
+      characterEventSongs.set(character, []);
+    }
+    characterEventSongs.get(character)?.push(song);
+  });
+
+  return characterEventSongs;
 };

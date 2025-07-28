@@ -67,6 +67,7 @@ export interface Character {
   givenName: string;
   fullName: string;
   unit: string;
+  avatarImageUrl: string;
 }
 
 type UnitID =
@@ -75,12 +76,12 @@ type UnitID =
   | "street"
   | "theme_park"
   | "school_refusal"
-  | "piapro";
+  | "piapro"; // piapro is vsinger unit, usually don't count as a unit
 
 export interface Unit {
   id: UnitID;
   name: string;
+  colorCode: string; // hex color code
   characters: Character[];
-  logoImageUrl: string; // URL to the unit's cover image
-  colorCode: string; // Hex color code for the unit
+  logoImageUrl: string;
 }

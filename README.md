@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SEKAI 最喜欢的歌曲
 
-## Getting Started
+一个用于选择 Project SEKAI（世界计划 彩色舞台）中每个角色最喜欢歌曲的网页应用。
 
-First, run the development server:
+## 功能特点
+
+- 📊 **4 行 5 列表格布局**：展示 5 个主要组合（Virtual Singer 除外）的所有角色
+- 🎵 **歌曲选择**：为每个角色选择他们的最爱歌曲
+- 🖼️ **歌曲封面显示**：直观展示选择的歌曲封面
+- 🔍 **搜索功能**：快速查找特定歌曲
+- 🎲 **随机选择**：一键为所有角色随机选择歌曲
+- 💾 **本地存储**：自动保存选择到浏览器本地存储
+- 📤 **导出功能**：将选择导出为 JSON 文件
+- 📱 **响应式设计**：支持桌面和移动设备
+
+## 技术栈
+
+- **Next.js 15** - React 框架
+- **TypeScript** - 类型安全
+- **Tailwind CSS** - 样式框架
+- **Zustand** - 状态管理
+- **SEKAI World API** - 数据源
+
+## 开发
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# 安装依赖
+pnpm install
+
+# 启动开发服务器
 pnpm dev
-# or
-bun dev
+
+# 构建生产版本
+pnpm build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 使用方法
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. 打开应用，等待数据加载完成
+2. 在表格中为每个角色选择喜欢的歌曲
+3. 查看歌曲封面预览
+4. 使用搜索框快速查找特定歌曲
+5. 使用控制按钮：
+   - 🎲 随机选择：为所有角色随机选择歌曲
+   - 🗑️ 清除所有：清除所有选择
+   - 💾 导出选择：下载选择结果为 JSON 文件
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 数据来源
 
-## Learn More
+应用使用 [SEKAI World](https://sekai.best/) 提供的公开 API 获取：
 
-To learn more about Next.js, take a look at the following resources:
+- 歌曲信息
+- 角色信息
+- 组合信息
+- 歌曲封面图片
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 组合说明
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+应用展示以下 5 个主要组合：
 
-## Deploy on Vercel
+- Leo/need
+- MORE MORE JUMP!
+- Vivid BAD SQUAD
+- Wonderlands×Showtime
+- 25-ji, Nightcord de.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+每个组合包含 4 个主要角色，按照官方顺序排列。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 许可证
+
+MIT License

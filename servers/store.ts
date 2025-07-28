@@ -1,12 +1,37 @@
 import { create } from "zustand";
-import { Song } from "./type";
+import { Character, Song, Unit } from "./type";
+import { listSongs, listCharacters, listSongVocals, listUnits } from "./apis";
+import {
+  completeCharacterEventSongs,
+  completeSongInfo,
+  completeUnits as completeUnits,
+} from "./server";
 
-export interface SongStore {
+export interface Store {
   songs: Song[];
-  fetchSongs: () => Promise<void>;
+  units: Unit[];
+  characters: Character[];
+  eventSongs: Map<Character, Song[]>;
+  fetchAll: () => Promise<void>;
 }
 
-export const useSongStore = create<SongStore>()((set, get) => ({
+export const useStore = create<Store>()((set, get) => ({
   songs: [],
-  fetchSongs: async () => {},
+  units: [],
+  characters: [],
+  eventSongs: new Map(),
+  fetchAll: async () => {
+    const [songsFromApis, characters, songVocals, unitsFromApis] =
+      await Promise.all([
+        listSongs(),
+        listCharacters(),
+        listSongVocals(),
+        listUnits(),
+      ]);
+    const songs = completeSongInfo(songsFromApis, characters, songVocals);
+    const units = completeUnits(unitsFromApis, characters);
+    const eventSongs = completeCharacterEventSongs(songs);
+
+    set({ songs, units, characters, eventSongs });
+  },
 }));

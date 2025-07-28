@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Character, SongFromAPI, Unit } from "./type";
 
 export const listSongs = async (): Promise<SongFromAPI[]> => {
@@ -13,13 +14,17 @@ export const listCharacters = async (): Promise<Character[]> => {
 
   const response = await fetch(url);
   const data = await response.json();
-  const characters: Character[] = data.map((char: any) => ({
-    id: char.id,
-    firstName: char.firstName || undefined, // optional
-    givenName: char.givenName,
-    fullName: `${char.firstName || ""}${char.givenName}`,
-    unit: char.unit,
-  }));
+  const characters: Character[] = data.map(
+    (char: any) =>
+      ({
+        id: char.id,
+        firstName: char.firstName || undefined, // optional
+        givenName: char.givenName,
+        fullName: `${char.firstName || ""}${char.givenName}`,
+        unit: char.unit,
+        avatarImageUrl: `https://sekai.best/images/jp/character/avatar/${char.id}.webp`,
+      } as Character)
+  );
   return characters;
 };
 
@@ -29,12 +34,13 @@ export const listSongVocals = async () => {
   );
   const songVocals = (await data.json()) as Array<{
     musicId: number;
+    musicVocalType: string;
     characters: Array<{
       characterId: number;
     }>;
   }>;
 
-  return songVocals;
+  return songVocals.filter((vocal) => vocal.musicVocalType === "sekai");
 };
 
 export const listUnits = async (): Promise<
