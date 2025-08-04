@@ -16,47 +16,47 @@ export function CharacterGrid({
   onSongSelect,
 }: CharacterGridProps) {
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-      {/* 组合 Logo 头部 */}
-      <div className="grid grid-cols-5 bg-gradient-to-r from-gray-50 to-gray-100">
-        {units.map((unit) => (
-          <UnitHeader key={unit.id} unit={unit} />
-        ))}
-      </div>
+    <div className="bg-white rounded-xl shadow-xl overflow-visible">
+      {/* 每个组合一行，组合Logo在左边，成员在右边 */}
+      {units.map((unit, unitIndex) => (
+        <div key={unit.id} className="border-b border-gray-200 last:border-b-0 flex overflow-hidden">
+          {/* 组合Logo在左侧 */}
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-r border-gray-200 flex-shrink-0">
+            <UnitHeader unit={unit} />
+          </div>
 
-      {/* 角色表格 */}
-      <div className="grid grid-cols-5 divide-x divide-gray-200">
-        {/* 为每个组合创建4行 */}
-        {Array.from({ length: 4 })
-          .map((_, rowIndex) =>
-            units.map((unit) => {
-              const character = unit.characters[rowIndex];
+          {/* 该组合的4个成员在右侧 */}
+          <div className="grid grid-cols-4 divide-x divide-gray-200 flex-1">
+            {Array.from({ length: 4 }).map((_, characterIndex) => {
+              const character = unit.characters[characterIndex];
               if (!character) {
                 return (
                   <div
-                    key={`${unit.id}-${rowIndex}-empty`}
-                    className="p-2 sm:p-4 border-b border-gray-200 min-h-[120px] bg-gray-50"
+                    key={`${unit.id}-${characterIndex}-empty`}
+                    className="p-2 sm:p-4 min-h-[120px] bg-gray-50"
                   />
                 );
               }
 
               const characterSongs = eventSongs.get(character) || [];
               const selectedSong = selectedSongs.get(character.id);
+              const isLastRow = unitIndex === units.length - 1;
 
               return (
                 <CharacterCell
-                  key={`${unit.id}-${rowIndex}`}
+                  key={`${unit.id}-${characterIndex}`}
                   character={character}
                   unit={unit}
                   songs={characterSongs}
                   selectedSong={selectedSong}
                   onSongSelect={onSongSelect}
+                  isLastRow={isLastRow}
                 />
               );
-            })
-          )
-          .flat()}
-      </div>
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

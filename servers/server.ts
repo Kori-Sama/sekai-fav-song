@@ -17,11 +17,9 @@ export const completeSongInfo = (
         (vocal) => vocal.musicId === song.id
       );
 
-      const characterIds =
-        songVocalsData?.characters.map((char) => char.characterId) || [];
 
-      const songCharacters = characters.filter((char) =>
-        characterIds.includes(char.id)
+      const songCharacters = songVocalsData?.characters.map(
+        (vocal) => characters.find((char) => char.id === vocal.characterId)
       );
 
       return {
@@ -56,11 +54,17 @@ export const completeUnits = (
 
 export const completeCharacterEventSongs = (
   songs: Song[],
-  events: Event[]
 ): Map<Character, Song[]> => {
   const eventSongsMap = new Map<Character, Song[]>();
-
-  // TODO
+  songs.forEach(song => {
+    const banner = song.characters?.[0];
+    if (banner) {
+      if (!eventSongsMap.has(banner)) {
+        eventSongsMap.set(banner, []);
+      }
+      eventSongsMap.get(banner)?.push(song);
+    }
+  })
 
   return eventSongsMap;
 };

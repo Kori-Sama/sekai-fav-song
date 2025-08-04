@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Character, SongFromAPI, Unit } from "./type";
 
 export const listSongs = async (): Promise<SongFromAPI[]> => {
@@ -9,21 +8,20 @@ export const listSongs = async (): Promise<SongFromAPI[]> => {
 };
 
 export const listCharacters = async (): Promise<Character[]> => {
-  const url =
-    "https://sekai-world.github.io/sekai-master-db-diff/gameCharacters.json";
+  const url = "/characters.json";
 
   const response = await fetch(url);
   const data = await response.json();
   const characters: Character[] = data.map(
     (char: any) =>
-      ({
-        id: char.id,
-        firstName: char.firstName || undefined, // optional
-        givenName: char.givenName,
-        fullName: `${char.firstName || ""}${char.givenName}`,
-        unit: char.unit,
-        avatarImageUrl: `https://sekai.best/images/jp/character/avatar/${char.id}.webp`,
-      } as Character)
+    ({
+      id: char.id,
+      firstName: char.firstName || undefined, // optional
+      givenName: char.givenName,
+      fullName: `${char.firstName || ""}${char.givenName}`,
+      unit: char.unit,
+      avatarImageUrl: `/characters/${char.nickname}.png`,
+    } as Character)
   );
   return characters;
 };
