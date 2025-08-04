@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { Character, Song, Unit } from "./type";
-import { listSongs, listCharacters, listSongVocals, listUnits } from "./apis";
+import { listSongs, listCharacters, listSongVocals, listUnits, listEventSongs } from "./apis";
 import {
   completeCharacterEventSongs,
   completeSongInfo,
@@ -21,16 +21,17 @@ export const useStore = create<Store>()((set, get) => ({
   characters: [],
   eventSongs: new Map(),
   fetchAll: async () => {
-    const [songsFromApis, characters, songVocals, unitsFromApis] =
+    const [songsFromApis, characters, songVocals, unitsFromApis, rawEventSongs] =
       await Promise.all([
         listSongs(),
         listCharacters(),
         listSongVocals(),
         listUnits(),
+        listEventSongs(),
       ]);
     const songs = completeSongInfo(songsFromApis, characters, songVocals);
     const units = completeUnits(unitsFromApis, characters);
-    const eventSongs = completeCharacterEventSongs(songs);
+    const eventSongs = completeCharacterEventSongs(songs, rawEventSongs);
 
     set({ songs, units, characters, eventSongs });
   },

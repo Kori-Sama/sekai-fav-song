@@ -88,7 +88,7 @@ export function SongSelectorWithCover({
                 <img
                   src={selectedSong.coverImageUrl}
                   alt={selectedSong.title}
-                  className="w-16 h-16 sm:w-18 sm:h-18 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-transparent group-hover:border-blue-300"
+                  className="w-16 h-16 sm:w-26 sm:h-26 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-transparent group-hover:border-blue-300"
                   onError={(e) => {
                     e.currentTarget.src = "/placeholder-cover.png";
                   }}
@@ -110,10 +110,15 @@ export function SongSelectorWithCover({
                   </svg>
                 </div>
               </div>
+              <div className="text-xs text-gray-500 text-center mt-2 truncate max-w-full">
+                {selectedSong.title.length > 8
+                  ? selectedSong.title.slice(0, 8) + "..."
+                  : selectedSong.title}
+              </div>
             </div>
           ) : (
             <div>
-              <div className="w-16 h-16 sm:w-18 sm:h-18 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-dashed border-gray-300 group-hover:border-blue-400 flex items-center justify-center bg-gray-50 group-hover:bg-blue-50">
+              <div className="w-16 h-16  sm:w-26 sm:h-26 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-dashed border-gray-300 group-hover:border-blue-400 flex items-center justify-center bg-gray-50 group-hover:bg-blue-50">
                 <svg
                   className="w-8 h-8 text-gray-400 group-hover:text-blue-500"
                   fill="none"
@@ -127,6 +132,9 @@ export function SongSelectorWithCover({
                     d="M12 4v16m8-8H4"
                   />
                 </svg>
+              </div>
+              <div className="text-xs text-gray-500 text-center mt-2 truncate max-w-full">
+                选择歌曲
               </div>
             </div>
           )}
@@ -158,7 +166,7 @@ export function SongSelectorWithCover({
                       e.currentTarget.src = "/placeholder-cover.png";
                     }}
                   />
-                  <span className="text-xs truncate text-gray-800">
+                  <span className="text-xs truncate text-gray-800 flex-1 min-w-0">
                     {song.title}
                   </span>
                 </div>

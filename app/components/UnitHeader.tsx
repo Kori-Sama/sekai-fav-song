@@ -6,7 +6,7 @@ interface UnitHeaderProps {
 
 export function UnitHeader({ unit }: UnitHeaderProps) {
   return (
-    <div className="p-3 sm:p-4 text-center flex flex-col justify-center items-center min-h-[120px] w-20 sm:w-24">
+    <div className="p-3 sm:p-4 text-center flex flex-col justify-center items-center min-h-[120px] w-20 sm:w-32">
       <img
         src={unit.logoImageUrl}
         alt={unit.name}

@@ -54,9 +54,12 @@ export const completeUnits = (
 
 export const completeCharacterEventSongs = (
   songs: Song[],
+  eventSongs: { musicId: number }[],
 ): Map<Character, Song[]> => {
   const eventSongsMap = new Map<Character, Song[]>();
-  songs.forEach(song => {
+  songs.filter(
+    (song) => eventSongs.some((event) => event.musicId === song.id)
+  ).forEach(song => {
     const banner = song.characters?.[0];
     if (banner) {
       if (!eventSongsMap.has(banner)) {
@@ -65,6 +68,16 @@ export const completeCharacterEventSongs = (
       eventSongsMap.get(banner)?.push(song);
     }
   })
+
+  // fix
+  const fixedSong = songs.find(s => s.id === 62)
+
+  if (fixedSong) {
+    const src = fixedSong.characters?.[0];
+    const dst = fixedSong.characters?.[1];
+    eventSongsMap.get(src)?.shift();
+    eventSongsMap.set(dst, [fixedSong, ...eventSongsMap.get(dst) || []]);
+  }
 
   return eventSongsMap;
 };

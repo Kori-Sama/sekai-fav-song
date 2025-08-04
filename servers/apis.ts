@@ -58,4 +58,10 @@ export const listUnits = async (): Promise<
 export const listEventSongs = async () => {
   const url =
     "https://sekai-world.github.io/sekai-master-db-diff/eventMusics.json";
+
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.map((song: any) => ({
+    musicId: song.musicId,
+  }));
 };

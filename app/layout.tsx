@@ -13,8 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SEKAI 最喜欢的歌曲",
-  description: "选择每个角色最喜欢的歌曲",
+  title: "Sekai箱曲排名",
 };
 
 export default function RootLayout({
