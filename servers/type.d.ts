@@ -85,3 +85,10 @@ export interface Unit {
   characters: Character[];
   logoImageUrl: string;
 }
+
+export interface Event {
+  id: number;
+  name: string;
+  characterId: number; // 主角的角色 ID
+  musicId: number; // 关联的歌曲 ID
+}

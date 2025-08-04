@@ -56,3 +56,8 @@ export const listUnits = async (): Promise<
     colorCode: unit.colorCode,
   }));
 };
+
+export const listEventSongs = async () => {
+  const url =
+    "https://sekai-world.github.io/sekai-master-db-diff/eventMusics.json";
+};

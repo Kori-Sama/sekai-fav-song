@@ -101,10 +101,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-gray-800">
-          SEKAI 最喜欢的歌曲
-        </h1>
-
         <CharacterGrid
           units={mainUnits}
           eventSongs={eventSongs}

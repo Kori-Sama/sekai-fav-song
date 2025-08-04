@@ -55,17 +55,12 @@ export const completeUnits = (
 };
 
 export const completeCharacterEventSongs = (
-  songs: Song[]
+  songs: Song[],
+  events: Event[]
 ): Map<Character, Song[]> => {
-  const characterEventSongs = new Map<Character, Song[]>();
+  const eventSongsMap = new Map<Character, Song[]>();
 
-  songs.forEach((song) => {
-    const character = song.characters[0]; // Assuming the first character is the main one for the song
-    if (!characterEventSongs.has(character)) {
-      characterEventSongs.set(character, []);
-    }
-    characterEventSongs.get(character)?.push(song);
-  });
+  // TODO
 
-  return characterEventSongs;
+  return eventSongsMap;
 };
