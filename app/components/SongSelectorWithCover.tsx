@@ -54,47 +54,89 @@ export function SongSelectorWithCover({
     if (!dropdownRef.current) return { display: 'none' };
 
     const rect = dropdownRef.current.getBoundingClientRect();
-    const dropdownWidth = 192; // w-48 = 12rem = 192px
-    const dropdownHeight = 192; // max-h-48
+    const isMobile = window.innerWidth < 640; // sm breakpoint
 
-    let left = rect.left + rect.width / 2 - dropdownWidth / 2;
-    let top = isLastRow ? rect.top - dropdownHeight - 4 : rect.bottom + 4;
+    if (isMobile) {
+      // 移动端：使用更保守的定位策略
+      const dropdownWidth = Math.min(180, window.innerWidth * 0.8); // 80% 屏幕宽度，最大180px
+      const dropdownHeight = 160; // 稍微小一些的高度
+      const padding = 20;
 
-    // 边界检测
-    if (left < 8) left = 8;
-    if (left + dropdownWidth > window.innerWidth - 8) {
-      left = window.innerWidth - dropdownWidth - 8;
+      // 水平居中，但确保在屏幕范围内
+      let left = rect.left + rect.width / 2 - dropdownWidth / 2;
+      left = Math.max(padding, Math.min(left, window.innerWidth - dropdownWidth - padding));
+
+      // 垂直位置：优先显示在下方，如果空间不够再显示在上方
+      let top = rect.bottom + 8;
+      if (top + dropdownHeight > window.innerHeight - padding) {
+        top = rect.top - dropdownHeight - 8;
+        // 如果上方也不够，就显示在可见区域内
+        if (top < padding) {
+          top = padding;
+        }
+      }
+
+      return {
+        position: 'fixed' as const,
+        top: `${top}px`,
+        left: `${left}px`,
+        width: `${dropdownWidth}px`,
+        maxHeight: `${Math.min(dropdownHeight, window.innerHeight - top - padding)}px`,
+        zIndex: 9999,
+      };
+    } else {
+      // 桌面端：保持原有逻辑
+      const dropdownWidth = 192; // w-48 = 12rem = 192px
+      const dropdownHeight = 192; // max-h-48
+      const padding = 8;
+
+      let left = rect.left + rect.width / 2 - dropdownWidth / 2;
+
+      // 边界检测 - 确保不超出屏幕
+      if (left < padding) {
+        left = padding;
+      } else if (left + dropdownWidth > window.innerWidth - padding) {
+        left = window.innerWidth - dropdownWidth - padding;
+      }
+
+      // 计算垂直位置
+      let top = isLastRow ? rect.top - dropdownHeight - 4 : rect.bottom + 4;
+
+      // 垂直边界检测
+      if (top < padding) {
+        top = rect.bottom + 4; // 如果上方空间不够，强制显示在下方
+      } else if (top + dropdownHeight > window.innerHeight - padding) {
+        top = rect.top - dropdownHeight - 4; // 如果下方空间不够，显示在上方
+      }
+
+      return {
+        position: 'fixed' as const,
+        top: `${Math.max(padding, top)}px`,
+        left: `${left}px`,
+        width: `${dropdownWidth}px`,
+        zIndex: 9999,
+      };
     }
-
-    return {
-      position: 'fixed' as const,
-      top: `${top}px`,
-      left: `${left}px`,
-      zIndex: 9999,
-    };
-  };
-
-  const handleSongSelect = (song: Song) => {
+  }; const handleSongSelect = (song: Song) => {
     onSongSelect(character.id, song);
     setIsOpen(false);
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       {/* 点击封面选择歌曲 */}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative w-full" ref={dropdownRef}>
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className="text-center cursor-pointer group"
+          className="text-center cursor-pointer group w-full"
         >
           {selectedSong ? (
-            <div>
-              <div className="relative">
+            <div className="w-full">
+              <div className="relative flex justify-center">
                 <img
                   src={getProxyImageUrl(selectedSong.coverImageUrl)}
                   alt={selectedSong.title}
-                  className="w-16 h-16 sm:w-26 sm:h-26 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-transparent group-hover:border-blue-300"
-
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-transparent group-hover:border-blue-300"
                 />
                 {/* 下拉箭头指示器 */}
                 <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -113,13 +155,13 @@ export function SongSelectorWithCover({
                   </svg>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 text-center mt-2 truncate">
+              <div className="text-xs text-gray-500 text-center mt-2 truncate px-1">
                 {selectedSong.title}
               </div>
             </div>
           ) : (
-            <div>
-              <div className="w-16 h-16  sm:w-26 sm:h-26 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-dashed border-gray-300 group-hover:border-blue-400 flex items-center justify-center bg-gray-50 group-hover:bg-blue-50">
+            <div className="w-full">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-dashed border-gray-300 group-hover:border-blue-400 flex items-center justify-center bg-gray-50 group-hover:bg-blue-50">
                 <svg
                   className="w-8 h-8 text-gray-400 group-hover:text-blue-500"
                   fill="none"
@@ -144,7 +186,7 @@ export function SongSelectorWithCover({
         {/* 下拉选项 */}
         {isOpen && createPortal(
           <div
-            className="dropdown-portal w-48 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto"
+            className="dropdown-portal bg-white border border-gray-300 rounded-lg shadow-lg overflow-y-auto"
             style={getDropdownStyle()}
             onMouseDown={(e) => e.stopPropagation()} // 阻止事件冒泡
           >
@@ -158,14 +200,13 @@ export function SongSelectorWithCover({
                   handleSongSelect(song);
                 }}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 min-w-0">
                   <img
                     src={getProxyImageUrl(song.coverImageUrl)}
                     alt={song.title}
                     className="w-10 h-10 rounded object-cover flex-shrink-0"
-
                   />
-                  <span className="text-xs truncate text-gray-800">
+                  <span className="text-xs truncate text-gray-800 min-w-0 flex-1">
                     {song.title}
                   </span>
                 </div>

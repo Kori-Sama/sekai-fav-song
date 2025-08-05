@@ -24,7 +24,7 @@ export const CharacterGrid = forwardRef<HTMLDivElement, CharacterGridProps>(({
           {/* 桌面端：横向布局 */}
           <div className="hidden sm:flex overflow-hidden">
             {/* 组合Logo在左侧 */}
-            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-r border-gray-200 flex-shrink-0">
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-r border-gray-200 flex-shrink-0 sm:flex sm:items-center">
               <UnitHeader unit={unit} />
             </div>
 
@@ -63,7 +63,7 @@ export const CharacterGrid = forwardRef<HTMLDivElement, CharacterGridProps>(({
           {/* 手机端：纵向布局，分成两行 */}
           <div className="sm:hidden">
             {/* 组合标题 */}
-            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 p-3">
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 p-3 flex justify-center">
               <UnitHeader unit={unit} />
             </div>
 

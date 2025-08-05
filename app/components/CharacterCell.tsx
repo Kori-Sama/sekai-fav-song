@@ -20,15 +20,15 @@ export function CharacterCell({
 }: CharacterCellProps) {
 
   return (
-    <div className="p-2 sm:p-4  transition-colors min-h-[120px] flex flex-row items-center space-x-3">
+    <div className="p-2 sm:p-4 transition-colors min-h-[120px] flex flex-row items-center space-x-3 overflow-hidden">
       {/* 角色信息 - 左侧 */}
       <div className="flex flex-col items-center flex-shrink-0">
         {/* 角色头像 */}
-        <div className="relative w-12 sm:w-14 h-20  mb-2">
+        <div className="relative w-12 sm:w-14 h-20 mb-2">
           <img
             src={character.avatarImageUrl}
             alt={character.fullName}
-            className="w-full h-full object-cover border-gray-200"
+            className="w-full h-full object-cover border-gray-200 rounded"
             onError={(e) => {
               // 如果头像加载失败，使用默认占位符
               e.currentTarget.src =
@@ -39,18 +39,18 @@ export function CharacterCell({
 
         {/* 角色名字标签 */}
         <div
-          className="text-xs font-medium  py-1 text-center w-24 truncate"
+          className="text-xs font-medium py-1 text-center w-16 sm:w-20 truncate"
           style={{
-
             color: unit.colorCode,
           }}
+          title={character.fullName}
         >
           {character.fullName}
         </div>
       </div>
 
       {/* 歌曲选择和显示 - 右侧 */}
-      <div className="flex-1 flex flex-col justify-center">
+      <div className="flex-1 flex flex-col justify-center min-w-0">
         <SongSelectorWithCover
           character={character}
           songs={songs}
