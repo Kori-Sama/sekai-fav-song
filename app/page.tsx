@@ -114,6 +114,28 @@ export default function Home() {
           totalCount={totalCharacters}
           onClearAll={clearAllSelections}
         />
+
+        {/* 网站底部作者信息 */}
+        <footer className="mt-8 pt-4 border-t border-gray-200">
+          <div className="text-center text-xs text-gray-500">
+            Made by{" "}
+            <a
+              href="https://github.com/Kori-Sama"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-700 underline"
+            >
+              Kori-Sama
+            </a>{" "}
+            | 欢迎扩列:{" "}
+            <a
+
+              className="text-blue-600 hover:text-blue-700 "
+            >
+              2923038671 (QQ)
+            </a>
+          </div>
+        </footer>
       </div>
     </div>
   );
