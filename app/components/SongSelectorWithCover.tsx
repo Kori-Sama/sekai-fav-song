@@ -20,6 +20,11 @@ export function SongSelectorWithCover({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Helper function to get proxy image URL
+  const getProxyImageUrl = (originalUrl: string) => {
+    return `/api/proxy-image?url=${encodeURIComponent(originalUrl)}`;
+  };
+
   // 点击外部关闭下拉框
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -86,7 +91,7 @@ export function SongSelectorWithCover({
             <div>
               <div className="relative">
                 <img
-                  src={selectedSong.coverImageUrl}
+                  src={getProxyImageUrl(selectedSong.coverImageUrl)}
                   alt={selectedSong.title}
                   className="w-16 h-16 sm:w-26 sm:h-26 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-transparent group-hover:border-blue-300"
 
@@ -155,7 +160,7 @@ export function SongSelectorWithCover({
               >
                 <div className="flex items-center space-x-2">
                   <img
-                    src={song.coverImageUrl}
+                    src={getProxyImageUrl(song.coverImageUrl)}
                     alt={song.title}
                     className="w-10 h-10 rounded object-cover flex-shrink-0"
 
