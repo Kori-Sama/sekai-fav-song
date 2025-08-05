@@ -13,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sekai箱曲排名",
+  title: "书下曲Ranking",
+  icons: {
+    icon: "/nenerobot.jpg",
+  },
 };
 
 export default function RootLayout({

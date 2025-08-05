@@ -10,7 +10,9 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@types/html2canvas": "^1.0.0",
     "dayjs": "^1.11.13",
+    "html2canvas": "^1.4.1",
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",

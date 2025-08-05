@@ -1,6 +1,7 @@
 import { Unit, Character, Song } from "@/servers/type";
 import { UnitHeader } from "./UnitHeader";
 import { CharacterCell } from "./CharacterCell";
+import { forwardRef } from "react";
 
 interface CharacterGridProps {
   units: Unit[];
@@ -9,54 +10,129 @@ interface CharacterGridProps {
   onSongSelect: (characterId: number, song: Song) => void;
 }
 
-export function CharacterGrid({
+export const CharacterGrid = forwardRef<HTMLDivElement, CharacterGridProps>(({
   units,
   eventSongs,
   selectedSongs,
   onSongSelect,
-}: CharacterGridProps) {
+}, ref) => {
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-visible">
+    <div ref={ref} className="bg-white rounded-xl shadow-xl overflow-visible">
       {/* 每个组合一行，组合Logo在左边，成员在右边 */}
       {units.map((unit, unitIndex) => (
-        <div key={unit.id} className="border-b border-gray-200 last:border-b-0 flex overflow-hidden">
-          {/* 组合Logo在左侧 */}
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-r border-gray-200 flex-shrink-0">
-            <UnitHeader unit={unit} />
-          </div>
+        <div key={unit.id} className="border-b border-gray-200 last:border-b-0">
+          {/* 桌面端：横向布局 */}
+          <div className="hidden sm:flex overflow-hidden">
+            {/* 组合Logo在左侧 */}
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-r border-gray-200 flex-shrink-0">
+              <UnitHeader unit={unit} />
+            </div>
 
-          {/* 该组合的4个成员在右侧 */}
-          <div className="grid grid-cols-4 divide-x divide-gray-200 flex-1">
-            {Array.from({ length: 4 }).map((_, characterIndex) => {
-              const character = unit.characters[characterIndex];
-              if (!character) {
+            {/* 该组合的4个成员在右侧 */}
+            <div className="grid grid-cols-4 divide-x divide-gray-200 flex-1">
+              {Array.from({ length: 4 }).map((_, characterIndex) => {
+                const character = unit.characters[characterIndex];
+                if (!character) {
+                  return (
+                    <div
+                      key={`${unit.id}-${characterIndex}-empty`}
+                      className="p-2 sm:p-4 min-h-[120px] bg-gray-50"
+                    />
+                  );
+                }
+
+                const characterSongs = eventSongs.get(character) || [];
+                const selectedSong = selectedSongs.get(character.id);
+                const isLastRow = unitIndex === units.length - 1;
+
                 return (
-                  <div
-                    key={`${unit.id}-${characterIndex}-empty`}
-                    className="p-2 sm:p-4 min-h-[120px] bg-gray-50"
+                  <CharacterCell
+                    key={`${unit.id}-${characterIndex}`}
+                    character={character}
+                    unit={unit}
+                    songs={characterSongs}
+                    selectedSong={selectedSong}
+                    onSongSelect={onSongSelect}
+                    isLastRow={isLastRow}
                   />
                 );
-              }
+              })}
+            </div>
+          </div>
 
-              const characterSongs = eventSongs.get(character) || [];
-              const selectedSong = selectedSongs.get(character.id);
-              const isLastRow = unitIndex === units.length - 1;
+          {/* 手机端：纵向布局，分成两行 */}
+          <div className="sm:hidden">
+            {/* 组合标题 */}
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 p-3">
+              <UnitHeader unit={unit} />
+            </div>
 
-              return (
-                <CharacterCell
-                  key={`${unit.id}-${characterIndex}`}
-                  character={character}
-                  unit={unit}
-                  songs={characterSongs}
-                  selectedSong={selectedSong}
-                  onSongSelect={onSongSelect}
-                  isLastRow={isLastRow}
-                />
-              );
-            })}
+            {/* 第一行：前两个成员 */}
+            <div className="grid grid-cols-2 divide-x divide-gray-200 border-b border-gray-100">
+              {Array.from({ length: 2 }).map((_, characterIndex) => {
+                const character = unit.characters[characterIndex];
+                if (!character) {
+                  return (
+                    <div
+                      key={`${unit.id}-${characterIndex}-empty-row1`}
+                      className="p-2 min-h-[120px] bg-gray-50"
+                    />
+                  );
+                }
+
+                const characterSongs = eventSongs.get(character) || [];
+                const selectedSong = selectedSongs.get(character.id);
+
+                return (
+                  <CharacterCell
+                    key={`${unit.id}-${characterIndex}-row1`}
+                    character={character}
+                    unit={unit}
+                    songs={characterSongs}
+                    selectedSong={selectedSong}
+                    onSongSelect={onSongSelect}
+                    isLastRow={false}
+                  />
+                );
+              })}
+            </div>
+
+            {/* 第二行：后两个成员 */}
+            <div className="grid grid-cols-2 divide-x divide-gray-200">
+              {Array.from({ length: 2 }).map((_, characterIndex) => {
+                const actualIndex = characterIndex + 2;
+                const character = unit.characters[actualIndex];
+                if (!character) {
+                  return (
+                    <div
+                      key={`${unit.id}-${actualIndex}-empty-row2`}
+                      className="p-2 min-h-[120px] bg-gray-50"
+                    />
+                  );
+                }
+
+                const characterSongs = eventSongs.get(character) || [];
+                const selectedSong = selectedSongs.get(character.id);
+                const isLastRow = unitIndex === units.length - 1;
+
+                return (
+                  <CharacterCell
+                    key={`${unit.id}-${actualIndex}-row2`}
+                    character={character}
+                    unit={unit}
+                    songs={characterSongs}
+                    selectedSong={selectedSong}
+                    onSongSelect={onSongSelect}
+                    isLastRow={isLastRow}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       ))}
     </div>
   );
-}
+});
+
+CharacterGrid.displayName = 'CharacterGrid';

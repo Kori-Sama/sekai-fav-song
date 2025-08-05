@@ -110,10 +110,8 @@ export function SongSelectorWithCover({
                   </svg>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 text-center mt-2 truncate max-w-full">
-                {selectedSong.title.length > 8
-                  ? selectedSong.title.slice(0, 8) + "..."
-                  : selectedSong.title}
+              <div className="text-xs text-gray-500 text-center mt-2 truncate">
+                {selectedSong.title}
               </div>
             </div>
           ) : (
@@ -133,7 +131,7 @@ export function SongSelectorWithCover({
                   />
                 </svg>
               </div>
-              <div className="text-xs text-gray-500 text-center mt-2 truncate max-w-full">
+              <div className="text-xs text-gray-500 text-center mt-2">
                 选择歌曲
               </div>
             </div>
@@ -166,7 +164,7 @@ export function SongSelectorWithCover({
                       e.currentTarget.src = "/placeholder-cover.png";
                     }}
                   />
-                  <span className="text-xs truncate text-gray-800 flex-1 min-w-0">
+                  <span className="text-xs truncate text-gray-800">
                     {song.title}
                   </span>
                 </div>
