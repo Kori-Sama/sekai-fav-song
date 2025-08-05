@@ -89,9 +89,7 @@ export function SongSelectorWithCover({
                   src={selectedSong.coverImageUrl}
                   alt={selectedSong.title}
                   className="w-16 h-16 sm:w-26 sm:h-26 mx-auto rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-2 border-transparent group-hover:border-blue-300"
-                  onError={(e) => {
-                    e.currentTarget.src = "/placeholder-cover.png";
-                  }}
+
                 />
                 {/* 下拉箭头指示器 */}
                 <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -160,9 +158,7 @@ export function SongSelectorWithCover({
                     src={song.coverImageUrl}
                     alt={song.title}
                     className="w-10 h-10 rounded object-cover flex-shrink-0"
-                    onError={(e) => {
-                      console.log(e);
-                    }}
+
                   />
                   <span className="text-xs truncate text-gray-800">
                     {song.title}
