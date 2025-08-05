@@ -161,7 +161,7 @@ export function SongSelectorWithCover({
                     alt={song.title}
                     className="w-10 h-10 rounded object-cover flex-shrink-0"
                     onError={(e) => {
-                      e.currentTarget.src = "/placeholder-cover.png";
+                      console.log(e);
                     }}
                   />
                   <span className="text-xs truncate text-gray-800">
