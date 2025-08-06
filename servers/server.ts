@@ -83,20 +83,16 @@ export const completeCharacterEventSongs = (
     eventSongsMap.set(dst, [fixedSong, ...eventSongsMap.get(dst) || []]);
   }
 
-  // // add
-  // const banner = 16
-  // const addSong: Song = {
-  //   id: 290,
-  //   title: "どんな結末がお望みだい？",
-  //   creatorArtistId: 153,
-  //   lyricist: "ぷす(fromツユ)",
-  //   composer: "ぷす(fromツユ)",
-  //   arranger: "ぷす(fromツユ)",
-  //   publishedAt: dayjs(1666332000000).format("YYYY-MM-DD"),
-  //   releasedAt: dayjs(1666278000000).format("YYYY-MM-DD"),
-  //   characters: [eventSongsMap.has(banner) ? eventSongsMap.get(banner)?.[0].characters],
 
-  // };
+  const fixedSong2 = songs.find(s => s.id === 64)
+
+  if (fixedSong2) {
+    const src = fixedSong2.characters?.[0];
+    const dst = fixedSong2.characters?.[1];
+    eventSongsMap.get(src)?.shift();
+    eventSongsMap.set(dst, [fixedSong2, ...eventSongsMap.get(dst) || []]);
+  }
+
 
   return eventSongsMap;
 };
