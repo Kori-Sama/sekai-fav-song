@@ -13,8 +13,6 @@ export function ProgressStats({
 
   return (
     <div className="mt-4 space-y-4">
-
-      (
       <div className="text-center">
         <button
           onClick={onClearAll}
@@ -23,7 +21,6 @@ export function ProgressStats({
           🗑️ 清除所有选择
         </button>
       </div>
-      )
     </div>
   );
 }

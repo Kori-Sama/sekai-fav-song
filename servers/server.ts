@@ -57,8 +57,12 @@ export const completeCharacterEventSongs = (
   eventSongs: { musicId: number }[],
 ): Map<Character, Song[]> => {
   const eventSongsMap = new Map<Character, Song[]>();
+
+
   songs.filter(
-    (song) => eventSongs.some((event) => event.musicId === song.id)
+    (song) =>
+      song.id === 290 || // 芥末回家
+      eventSongs.some((event) => event.musicId === song.id)
   ).forEach(song => {
     const banner = song.characters?.[0];
     if (banner) {
@@ -78,6 +82,21 @@ export const completeCharacterEventSongs = (
     eventSongsMap.get(src)?.shift();
     eventSongsMap.set(dst, [fixedSong, ...eventSongsMap.get(dst) || []]);
   }
+
+  // // add
+  // const banner = 16
+  // const addSong: Song = {
+  //   id: 290,
+  //   title: "どんな結末がお望みだい？",
+  //   creatorArtistId: 153,
+  //   lyricist: "ぷす(fromツユ)",
+  //   composer: "ぷす(fromツユ)",
+  //   arranger: "ぷす(fromツユ)",
+  //   publishedAt: dayjs(1666332000000).format("YYYY-MM-DD"),
+  //   releasedAt: dayjs(1666278000000).format("YYYY-MM-DD"),
+  //   characters: [eventSongsMap.has(banner) ? eventSongsMap.get(banner)?.[0].characters],
+
+  // };
 
   return eventSongsMap;
 };
